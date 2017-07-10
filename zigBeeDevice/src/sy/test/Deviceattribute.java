@@ -34,6 +34,8 @@ public class Deviceattribute implements java.io.Serializable {
 	public Deviceattribute() {
 	}
 
+	
+	
 	/** full constructor */
 	public Deviceattribute(String houseIeee, long roomId, String deviceIeee,
 			String deviceEp, String clusterId, String attributeId,
