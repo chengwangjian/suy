@@ -16,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class Deviceattribute implements java.io.Serializable {
 
 	// Fields
-
+   // 
 	private long id;
 	private String houseIeee;
 	private long roomId;
