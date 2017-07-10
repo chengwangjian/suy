@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+	<!-- 自动扫描dao和service包(自动注入) -->
+	<context:component-scan
+		base-package="com.flywind.app.resources,com.flywind.app.dal,com.flywind.app.services,
+    org.jbx.util;org.jbxbase.dao,org.jbxbase.services,org.smarthome.dal,org.smarthome.services,sy.dao,sy.service,sy.util,sy.test,
+    						zbHouse.dao,zbHouse.service,zbHouse.editor,zbEnergy.service,zbEnergy.editor">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 指名具体的filter类 -->
+	<bean id="setCharacterEncodingFilter" class="sy.filters.SetCharacterEncodingFilter">
+	</bean>
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:resources.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- JDBC数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass">
+			<value>${jdbc.driverClass}</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${jdbc.jdbcUrl}</value>
+		</property>
+		<property name="user">
+			<value>${jdbc.user}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc.password}</value>
+		</property>
+		<property name="maxPoolSize">
+			<value>${jdbc.maxActive}</value>
+		</property>
+		<property name="minPoolSize">
+			<value>${jdbc.maxIdle}</value>
+		</property>
+		<property name="initialPoolSize">
+			<value>${jdbc.initialSize}</value>
+		</property>
+		<!-- <property name="minIdle">
+			<value>${jdbc.minIdle}</value>
+		</property>
+		<property name="maxWait">
+			<value>${jdbc.maxWait}</value>
+		</property> -->
+		<!-- 最大闲置时间 -->
+		<property name="maxIdleTime">
+			<value>300</value>
+		</property>
+		<!-- 连接池中连接不够用时，一次性获取连接数量 -->
+		<property name="acquireIncrement">
+			<value>3</value>
+		</property>
+		<!-- 获取连接失败后，重试次数 -->
+		<property name="acquireRetryAttempts">
+			<value>3</value>
+		</property>
+		<!-- 每次重试的时间间隔 -->
+		<property name="acquireRetryDelay">
+			<value>1000</value>
+		</property>
+		<property name="checkoutTimeout">
+			<value>6000</value>
+		</property>
+		<!-- 闲置检测时间间隔 -->
+		<property name="idleConnectionTestPeriod">
+			<value>60</value>
+		</property>
+		<!-- 定是检测语句 -->
+		<property name="preferredTestQuery">
+			<value>SELECT 1</value>
+		</property>
+		
+		<!-- <property name="testOnBorrow">
+			<value>${jdbc.testOnBorrow}</value>
+		</property>
+		<property name="testOnReturn">
+			<value>${jdbc.testOnReturn}</value>
+		</property>
+		<property name="testWhileIdle">
+			<value>${jdbc.testWhileIdle}</value>
+		</property>
+		<property name="validationQuery">
+			<value>${jdbc.validationQuery}</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>${jdbc.timeBetweenEvictionRunsMillis}</value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>${jdbc.minEvictableIdleTimeMillis}</value>
+		</property> -->
+	</bean>
+	<!-- bugfree数据源 -->
+	<bean id="dataSource2" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName">
+			<value>${jdbc2.driverClass}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc2.jdbcUrl}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc2.user}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc2.password}</value>
+		</property>
+	</bean>
+
+	<!-- 此处必须加dataSource，不加就报错 -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>sy.model</value>
+				<value>zbHouse.model</value>
+				<value>zbEnergy.model</value>
+				<value>com.flywind.app.entities</value>
+				<value>org.smarthome.domain</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
+				<prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.bytecode.use_reflection_optimizer">${hibernate.bytecode.use_reflection_optimizer}</prop>
+				<prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 此处必须加dataSource，不加就报错 -->
+	<bean id="sessionFactory2"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource2" />
+		<property name="packagesToScan">
+			<list>
+				<value>org.smarthome.domain</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
+				<prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 配置多数据源切换 -->
+	<!-- <bean id="multipleDataSource" class="org.jbx.util.MultipleDataSource"> 
+		<property name="defaultTargetDataSource" ref="dataSource"/> <property name="targetDataSources"> 
+		<map> <entry value="#{dataSoureProvider.dataSource1}" key="zigbeedeviceSource"/> 
+		<entry value="#{dataSoureProvider.dataSource2}" key="openfireSource"/> <entry 
+		value="#{dataSoureProvider.dataSource3}" key="zigbeedeviceTarget"/> <entry 
+		value="#{dataSoureProvider.dataSource4}" key="openfireTarget"/> </map> </property> 
+		</bean> <bean id="dataSoureProvider" class="org.jbx.util.DataSoureProvider"> 
+		</bean> <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+		<property name="dataSource" ref="multipleDataSource" /> <property name="typeAliasesPackage" 
+		value="org.jbxbase.domain"></property> <property name="mapperLocations" value="classpath*:org/jbxbase/**/*.xml" 
+		/> </bean> <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> 
+		<property name="basePackage" value="org.jbxbase.dao" /> <property name="sqlSessionFactoryBeanName" 
+		value="sqlSessionFactory" /> </bean> <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"> 
+		<constructor-arg index="0" ref="sqlSessionFactory" /> </bean> -->
+
+	<!-- ==============================================================bugfree================================================================== -->
+	<!-- 配置myBatis3事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory2" />
+	</bean>
+
+	<!-- 注解方式配置事物 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 拦截器方式配置事物 -->
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="find*" propagation="SUPPORTS" />
+			<tx:method name="key*" propagation="SUPPORTS" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="transactionPointcut"
+			expression="execution(* org.smarthome.services..*(..))" />
+		<aop:advisor pointcut-ref="transactionPointcut"
+			advice-ref="transactionAdvice" />
+	</aop:config>
+
+	<!-- ==============================================================zigBeeDevice================================================================== -->
+	<!-- 配置hibernate4事务管理器 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- 开启注解事务 只对当前配置文件有效 -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="create*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="insert*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="merge*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="del*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="remove*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="put*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="use*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到 -->
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="count*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="list*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 开启AOP监听 只对当前配置文件有效 -->
+	<!-- <aop:aspectj-autoproxy expose-proxy="true"/> -->
+	<!-- <aop:config expose-proxy="true"> -->
+	<aop:config proxy-target-class="true">
+		<!-- 只对业务逻辑层实施事务 -->
+		<aop:pointcut id="txPointcut"
+			expression="execution(* com.flywind.app.services..*(..)) || execution(* *.service..*Impl.*(..))
+		||execution(* org.smarthome.services..*(..)) " />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	</aop:config>
+
+	<!-- ==============================================================定时执行配置================================================================== -->
+	<!-- 每隔10分钟执行设置服务状态 -->
+	<bean id="executeActionJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="houseService" p:targetMethod="executeAction"
+		p:concurrent="false" />
+
+	<bean id="executeActionTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="executeActionJobDetail" p:cronExpression="0 0/10 * * * ?" />
+
+	<!-- 每隔5分钟执行更新离线状态,使用203的心跳来判断是否离线，时间频率是5分钟判断一次，如果连续3次没有收到心跳，那么判定该CSHC设备为离线状态, 
+		如果收到心跳或者其他推送上来的数据，那么判断该HouseIEEE地址对应的CSHC设备为在线状态 -->
+	<bean id="countOnlineJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="houseService" p:targetMethod="updateCountOnline"
+		p:concurrent="false" />
+	<bean id="countOnlineTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="countOnlineJobDetail" />
+		</property>
+		<property name="startDelay">
+			<value>0</value>
+		</property>
+		<property name="repeatInterval">
+			<value>300000</value>
+		</property>
+	</bean>
+
+
+
+	<!-- 每天16:30发送邮件 上下线监控报告 -->
+	<bean id="mailServiceJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="houseService" p:targetMethod="mailService"
+		p:concurrent="false" />
+	<bean id="mailServiceTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="mailServiceJobDetail" p:cronExpression="0 30 16 * * ?" />
+
+	<!-- 每隔10分钟执行burn in 状态更新 -->
+	<bean id="brinServiceJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="brinService" p:targetMethod="updateRflag"
+		p:concurrent="false" />
+
+	<bean id="brinServiceTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="brinServiceJobDetail" p:cronExpression="0 0/1 * * * ?" />
+
+	<!-- 在00:00:00执行更新house的短信、邮件的状态 -->
+	<bean id="smsEmailServiceJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="houseService" p:targetMethod="updateSMSEmailState"
+		p:concurrent="false" />
+
+	<bean id="smsEmailServiceTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="smsEmailServiceJobDetail" p:cronExpression="5 0 0 * * ?" />
+
+	<!-- 每隔2分钟发送告警短信 -->
+	<bean id="sendWarnSmsJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="devicewarnhistoryHouseidYearService"
+		p:targetMethod="sendDeviceWarnSMS" p:concurrent="false" />
+
+	<bean id="sendWarnSmsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="sendWarnSmsJob" p:cronExpression="0 0/2 * * * ?" />
+
+	<!-- 每隔2分钟10秒保存属性 -->
+	<!-- <bean id="saveAttrJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="deviceattributeService" p:targetMethod="saveAttrCache"
+		p:concurrent="false" />
+
+	<bean id="saveAttrTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveAttrJob" p:cronExpression="10 0/2 * * * ?" /> -->
+
+	<!-- 每隔2分钟20秒保存操作 -->
+	<bean id="saveOperaJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="deviceoperatehistoryHouseidYearService"
+		p:targetMethod="savedingshi" p:concurrent="false" />
+
+	<bean id="saveOperaTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveOperaJob" p:cronExpression="20 0/2 * * * ?" />
+
+	<!-- 每隔2分钟30秒保存告警 -->
+	<bean id="saveWarnJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="devicewarnhistoryHouseidYearService"
+		p:targetMethod="savedingshiwarn" p:concurrent="false" />
+
+	<bean id="saveWarnTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveWarnJob" p:cronExpression="30 0/2 * * * ?" />
+
+	<!-- 每隔2分钟40秒保存IR -->
+	<bean id="saveIRJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="IRService" p:targetMethod="dingshiaddUnMatch"
+		p:concurrent="false" />
+
+	<bean id="saveIRTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveIRJob" p:cronExpression="40 0/2 * * * ?" />
+
+	<!-- 每隔2分钟50秒保存设备 -->
+	<bean id="saveDeviceJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="deviceService" p:targetMethod="saveCacheData"
+		p:concurrent="false" />
+
+	<bean id="saveDeviceTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveDeviceJob" p:cronExpression="50 0/2 * * * ?" />
+
+	<!-- 每隔3分钟保存房间 -->
+	<bean id="saveRoomJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="roomService" p:targetMethod="dingshiSave"
+		p:concurrent="false" />
+
+	<bean id="saveRoomTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveRoomJob" p:cronExpression="0 0/3 * * * ?" />
+
+	<!-- 每隔3分钟10秒保存video -->
+	<bean id="videoServiceJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="videoService" p:targetMethod="dingshiSave"
+		p:concurrent="false" />
+	<bean id="saveVideoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="videoServiceJob" p:cronExpression="10 0/3 * * * ?" />
+
+	<!-- 每隔3分钟20秒保存节点 -->
+	<bean id="saveNodeJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="nodeService" p:targetMethod="dingshiSave"
+		p:concurrent="false" />
+
+	<bean id="saveNodeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveNodeJob" p:cronExpression="20 0/3 * * * ?" />
+
+	<!-- 每隔3分钟30秒保存模式 -->
+	<bean id="saveModeJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="modeService" p:targetMethod="dingshiSave"
+		p:concurrent="false" />
+
+	<bean id="saveModeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveModeJob" p:cronExpression="30 0/3 * * * ?" />
+
+	<!-- 每隔3分钟重新加载一次配置文件 -->
+	<bean id="loadPropertiesJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="houseService" p:targetMethod="loadProperties"
+		p:concurrent="false" />
+
+	<bean id="loadPropertiesTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="loadPropertiesJob" p:cronExpression="40 0/3 * * * ?" />
+
+	<!-- 每隔3分钟重新加载一次配置文件 -->
+	<bean id="validServerJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="houseService" p:targetMethod="validServer"
+		p:concurrent="false" />
+
+	<bean id="validServerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="validServerJob" p:cronExpression="0 0 0 * * ?" />
+
+	<!-- 每隔15秒钟保存设备的最新属性值 -->
+	<bean id="saveNewestAttrsJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="deviceattributeService" p:targetMethod="saveNewestAttrs"
+		p:concurrent="false" />
+
+	<bean id="saveNewestAttrsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveNewestAttrsJob" p:cronExpression="0/15 * * * * ?" />
+
+	<!-- 每隔20秒更新用户密码 -->
+	<bean id="updateUserPasswordJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="farmUserService" p:targetMethod="scheduleUpdateUserPassword"
+		p:concurrent="false" />
+
+	<bean id="updateUserPasswordTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="updateUserPasswordJob" p:cronExpression="0/20 * * * * ?" />
+
+	<!-- 每隔2分钟保存rssi值 -->
+	<bean id="saveRssiRecordsJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="rssiRecordService" p:targetMethod="saveRssiRecords"
+		p:concurrent="false" />
+
+	<bean id="saveRssiRecordsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="saveRssiRecordsJob" p:cronExpression="5 0/2 * * * ?" />
+
+	<!-- 每月的15号10点30分进行上传文件的清除任务 -->
+	<bean id="deleteresJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="resourceServiceI" p:targetMethod="deleteres"
+		p:concurrent="false" />
+
+	<bean id="deleteresTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="deleteresJob" p:cronExpression="0 00 12 15 * ?" />
+
+	<!-- 每天的12点对上传文件中路径不存在的文件清除任务 -->
+	<bean id="deletepathJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="resourceServiceI" p:targetMethod="deletepath"
+		p:concurrent="false" />
+
+	<bean id="deletepathTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="deletepathJob" p:cronExpression="0 10 13 * * ?" />
+	   
+
+	<!-- 每天的14点对上传文件中的图片出错或者不完整的图片文件进行删除 -->
+	<bean id="deletepicJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="resourceServiceI" p:targetMethod="deletepic"
+		p:concurrent="false" />
+
+	<bean id="deletepicTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="deletepicJob" p:cronExpression="0 00 14 * * ?" />
+	
+	
+	<!-- 每隔1小时更新一次  -->	
+   <bean id="weatherEnvUpdateJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+        p:targetObject-ref="weatherEnvServiceI"  p:targetMethod="weatherEnvUpdate"
+        p:concurrent="false" />
+        
+   <bean id="weatherEnvUpdateTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+        p:jobDetail-ref="weatherEnvUpdateJob" p:cronExpression="0 0 0/1 * * ?" /> 
+
+	<bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="executeActionTrigger" />
+				<ref bean="mailServiceTrigger" />
+				<ref bean="brinServiceTrigger" />
+				<ref bean="countOnlineTrigger" />
+				<ref bean="smsEmailServiceTrigger" />
+				<ref bean="sendWarnSmsTrigger" />
+				<!-- <ref bean="saveAttrTrigger" /> -->
+				<ref bean="saveOperaTrigger" />
+				<ref bean="saveWarnTrigger" />
+				<ref bean="saveIRTrigger" />
+				<ref bean="saveDeviceTrigger" />
+				<ref bean="saveRoomTrigger" />
+				<ref bean="saveNodeTrigger" />
+				<ref bean="saveModeTrigger" />
+				<ref bean="saveVideoTrigger" />
+				<ref bean="loadPropertiesTrigger" />
+				<ref bean="validServerTrigger" />
+				<ref bean="saveNewestAttrsTrigger" />
+				<ref bean="updateUserPasswordTrigger" />
+				<ref bean="saveRssiRecordsTrigger" />
+				<ref bean="deleteresTrigger" />
+				<ref bean="deletepathTrigger" />
+				<ref bean="deletepicTrigger" />
+				<ref bean="weatherEnvUpdateTrigger"/>
+			</list>
+		</property>
+		<property name="schedulerContextAsMap">
+			<map>
+				<entry key="timeout" value="30" />
+			</map>
+		</property>
+		<property name="quartzProperties">
+			<props>
+				<prop key="org.quartz.threadPool.class">
+					org.quartz.simpl.SimpleThreadPool
+				</prop>
+				<prop key="org.quartz.threadPool.threadCount">10</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

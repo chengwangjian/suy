@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DeviceInfo>
+	<House>
+		<Main>
+			<ID Name="聪明屋" IEEE="" Description="" Longitude="" Latitude=""
+				NetworkAddress="" Version="" Encodemethod="0" SecretKey=""
+				CloudIP="218.104.133.242" CloudPort="8081" />
+		</Main>
+	</House>
+	<Room>
+		<Main>
+			<ID RoomID="-1" RoomName="家全局" RoomPic="" />
+			<ID RoomID="1" RoomName="客厅" RoomPic="" />
+			<ID RoomID="2" RoomName="主卧" RoomPic="" />
+			<ID RoomID="3" RoomName="书房" RoomPic="" />
+			<ID RoomID="4" RoomName="餐厅" RoomPic="" />
+			<ID RoomID="5" RoomName="客房" RoomPic="" />
+			<ID RoomID="6" RoomName="厨房" RoomPic="" />
+		</Main>
+	</Room>
+	<Node>
+		<Main>
+			<ID IEEE="" RoomID="1" Type="0" />
+			<ID IEEE="" RoomID="1" Type="0" />
+			<ID IEEE="" RoomID="1" Type="0" />
+			<ID IEEE="" RoomID="1" Type="0" />
+			<ID IEEE="" RoomID="1" Type="0" />
+			<ID IEEE="" RoomID="1" Type="0" />
+			<ID IEEE="" RoomID="1" Type="0" />
+			<ID IEEE="" RoomID="1" Type="0" />
+			<ID IEEE="" RoomID="2" Type="0" />
+		</Main>
+	</Node>
+	<Device>
+		<Main>
+			<ID MID="1" DeviceName="客厅吊灯" IEEE="" EP="01" RoomID="1" type="0"
+				Picname="" />
+			<ID MID="2" DeviceName="Z815K三路电能检测墙面开关1-2" IEEE="" EP="02"
+				RoomID="1" type="0" Picname="" />
+			<ID MID="3" DeviceName="Z815K三路电能检测墙面开关1-3" IEEE="" EP="03"
+				RoomID="1" type="0" Picname="" />
+			<ID MID="31" DeviceName="Z815I单路电能检测墙面开关1-1" IEEE="" EP="01"
+				RoomID="1" type="0" Picname="" />
+			<ID MID="33" DeviceName="客厅开关" IEEE="" EP="01" RoomID="1" type="0"
+				Picname="" />
+			<ID MID="34" DeviceName="厨房开关" IEEE="" EP="01" RoomID="1" type="0"
+				Picname="" />
+			<ID MID="35" DeviceName="客厅开关" IEEE="" EP="01" RoomID="1" type="0"
+				Picname="" />
+			<ID MID="36" DeviceName="厨房开关" IEEE="" EP="01" RoomID="1" type="0"
+				Picname="" />
+			<ID MID="37" DeviceName="客厅开关" IEEE="" EP="01" RoomID="1" type="0"
+				Picname="" />
+			<ID MID="38" DeviceName="厨房开关" IEEE="" EP="01" RoomID="2" type="0"
+				Picname="" />
+			<ID MID="39" DeviceName="控制名称" IEEE="" EP="01" RoomID="2" type="0"
+				Picname="" />
+		</Main>
+	</Device>
+</DeviceInfo>

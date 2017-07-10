@@ -1,0 +1,121 @@
+2014.01.14外网发布新数据库zigbeedevice
+
+2014.02.14更新如下：     新版模式编辑器修改表结构
+表名                                            			删除字段                               					重命名字段					增加字段    			
+表deviceattrlib				删MinValue;MaxValue;
+						删DevcieSceneInfo;Description;
+表modegroupmain													macroId更名为GroupID            
+  
+新增表modescenemain  
+新增表 modescenesub
+
+2014.02.26
+表modenodelib																					           增powerType;activationMethod;
+																								增resetDefault;remark;
+表modegroupsub               		 删device													          增groupName	
+2014.03.11
+表modeactlib                                                                                      增ScenePara
+																ExtentionSet字段类型
+																从varchar改成bigint
+																(为了该字段排序使用)
+表modehvacmain																					增bAllmodeActive	
+表modeiasmain 																					增ballmodeActive
+新增表modemacrocasc  无用表
+删除、新建表Modemacroproc 无用表
+表modeschememain																					增ballmodeActive		
+
+2014.03.24
+zigbeedevice1.0新版本数据库
+
+2014.04.01  模式编辑器第一版修订版备份工程名zigBeeDeviceMode1.3-20140402
+原来外网数据库名zigbeedevice改为zigbeedevice1.0第一版修订版新版本外网数据库
+数据库名zigbeedevice目前没用。留作备份。zigbeedevice数据库是2014.04.01前的外网数据库。	
+			
+2014.04.22 第二版数据库更名为zigBeeDeviceV2(2014.04.23 第二版数据库取消更名，还是zigBeeDevice)  工程名更改为zigBeeDeviceV2	 升级时，保证第一版和第二版外网数据库名一致，数据兼容
+推送数据增加表 deviceattribute_v2 
+
+2014.04.25 
+删除表 deviceattribute_v2 
+
+2014.04.25 2014.05.13更新如下：     新版模式编辑器修改表结构
+表名                                            			删除字段                               					重命名字段					增加字段    	
+表deviceattribute																				增daemonDeviceId;(默认值都是0)
+																								增deviceType;(默认值都是1);source_id(默认值都是1);
+																								增id_string3
+表deviceattributehistory_houseid_year															增daemonDeviceId;(默认值都是0)
+																								增deviceType;(默认值都是1);source_id(默认值都是1);
+																								增id_string3
+表deviceoperatehistory_houseid_year																增daemonDeviceId;(默认值都是0)
+																								增deviceType;(默认值都是1);source_id(默认值都是1);
+																								增id_string3
+表devicewarnhistory_houseid_year																           增daemonDeviceId;(默认值都是0)
+																								增deviceType;(默认值都是1);source_id(默认值都是1);
+																								增id_string3
+表modeeplib																						增deviceTypeV2(默认值1)
+表modedevice																					           增deviceType(默认值1)、source_id(默认值1)
+表Modenodelib																					增source_id(默认值1)
+表Modenode																						增source_id(默认值1)
+表device																				                                增device_id;(默认值都是0)
+																								增source_id;(默认值都是1);device_type(默认值都是1);
+																								增AttrInfo;
+
+20140508  新增model_editorV2工程	
+
+2014.05.21  模式编辑器第一版修订版数据库升级(从2014.04.01数据库开始升级)
+内网zigbeedevice表增加字段
+
+2014.05.21更新如下：     新版模式编辑器修改表结构
+表名                                            			删除字段                               					重命名字段					增加字段
+Modescheme、ModesubTest存储过程修改。增加存储过程SPLIT_SUB_STR0
+表device																				                                增createtime;lasttime;isonline(默认值1)，修改索引   	
+表house																				                                增regionCode(默认值厦门);isonline(默认值0) 
+                                                                                                                                                                                                                                                                增videoService tinyint 默认值0（删掉）
+                                                                                                                                                                                                                                                                增leaveHomeInform tinyint 默认值0（删掉）;增clientCode		
+表devicepicsetlib	                                       									           增houseId(默认值-1);
+表modescenesub																					 增status 
+表modegroupsub																					 增status
+新增表usermodedevice														
+表usermodemain																					 增EnableCheckOnOff tinyint 默认值0
+																								 增orderId int 默认值0;
+表modeuser																						 增level_id	tinyint 默认值3; 																							 
+增加存储过程Sorted_Sub_List0
+#非模式编辑器的表2014-07-01
+新增表hardhistory
+新增表releasehistory
+新增表updatehistory
+新增表attributenamelib及数据
+新增表operatelib及数据
+新增表reliuser
+新增表rssirecord
+新增表clientcode及数据
+新增表houseservice
+新增表modelevel、modeprivilege、modelevelprivilege及数据
+新增表relilevel、relilevelprivilege、reliprivilege及数据
+新增表useraccount
+新增表userrelevance
+修改表modeactlib及数据
+
+2014-07-02 发布外网数据库zigbeedevice1.0和云端项目zigBeeDevice、cloudWebServer和model_editor
+
+2014.07.03  模式编辑器第一版修订版数据库升级
+修改ModedeleteTest存储过程。
+2014.07.03更新如下：     新版模式编辑器修改表结构
+表名                                            			删除字段                               					重命名字段					增加字段
+
+node表																							增nodeType，增nodeName
+Releasehistory表																				           增md5
+新增表Houseemail
+修改表houseservice																				增Monitor_state（监控状态）、增email
+																							           增defaultemail、增emaildescription
+attributenamelib表重新创建和导入数据	
+表device																				                                增deviceattribute;增unit_type	
+表deviceattrlib		删decimal、增uniqueName																				           
+表modeactlib	                                              增groupabled;增groupLevel;增sceneabled;	
+表irmodel 增deviceStyle、增remoteControlStyle
+表irdata 增irdata、增commdSequence、增actionNameDescription
+表irbrand 增region、增firstchar		
+
+2014.10.16
+新增表IRBranddictionary
+新增表ircontrolltype	
+新增表irmatch												

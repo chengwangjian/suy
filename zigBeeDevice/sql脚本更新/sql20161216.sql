@@ -1,0 +1,1 @@
+UPDATE reliprivilege SET privilege_name_en = 'Family registration' WHERE id = 1011;

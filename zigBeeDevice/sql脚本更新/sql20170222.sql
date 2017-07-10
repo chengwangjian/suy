@@ -1,0 +1,1 @@
+alter table serverlib add column serverdomain varchar(100) after serverip;

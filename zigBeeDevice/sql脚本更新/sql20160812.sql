@@ -1,0 +1,1 @@
+INSERT INTO warntypetable VALUES (NULL, NULL, NULL, 70);

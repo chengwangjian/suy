@@ -1,0 +1,1 @@
+UPDATE warntypetable SET ChinesewarnType='<房间>-<设备>瞬间电流超过150A!' WHERE w_mode=46;

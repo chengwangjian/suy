@@ -1,0 +1,54 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <script src="js/jquery.1.9.1.min.js"></script>
+  </head>
+  
+  <body> 
+  
+	<form id="formImg" action="uploadImg"  method="post"  target="hidden_frame" enctype="multipart/form-data">  
+	   <div class="fromtrs">  
+	      <label>活动海报：</label>  
+	      <input id="AidImg" class="sstp" type="file" name="AidImg" onchange="uploadImg()"/>    
+	      <div class="sjjt" style="display:none;" id="imgError">  
+	      <div class="bzsj_left"></div>活动海报不可为空</div>  
+	   </div>  
+	</form>   
+	<iframe style="display:none" name='hidden_frame' id="hidden_frame"></iframe>  
+	<div class="fromtrs">  
+	   <img id="img" src="" width="80" height="80"/>  
+	</div>  
+	
+ 	<script type="text/javascript">
+ 	
+	function uploadImg()  
+	{  
+	    var names=$("#AidImg").val().split(".");  
+	    if(names[1]!="gif"&&names[1]!="GIF"&&names[1]!="jpg"&&names[1]!="JPG"&&names[1]!="png"&&names[1]!="PNG")  
+	    {  
+	        $("#imgError").html("<div class='bzsj_left'></div>"+"海报必须为gif,jpg,png格式");  
+	        $("#imgError").show();  
+	        return;  
+	    }  
+	    $("#formImg").submit();  
+	}  
+  
+	function callback(message,success)  
+	{  
+	    if(success==false)  
+	    {  
+	        $("#imgError").html("<div class='bzsj_left'></div>"+message);  
+	        $("#imgError").show();  
+	    }  
+	    else{  
+	        $("#imgError").hide();  
+	        var paths=message.split("/");  
+	        $("#img").attr("src",message);  
+	        $("input[name='imgUrl']").val(paths[paths.length-1]);  
+	    }  
+}  
+ 	
+ 	</script>
+    </body>
+</html>

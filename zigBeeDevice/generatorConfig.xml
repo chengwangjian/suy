@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+	<!-- 数据库驱动包位置 -->
+	<classPathEntry location="F:\Workspaces\MyEclipse for Spring 10\demo\WebContent\WEB-INF\lib\mysql-connector-java-5.1.21.jar" /> 
+  <context id="context1" >
+  		<!-- 数据库链接URL、用户名、密码 -->
+	    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://218.104.133.247:3306/zigbeedevice_kf" 
+	    	userId="root" password="Ntx@$Yanfa247" />
+	    <javaModelGenerator targetPackage="org.jbxbase.domain" targetProject="demo" />
+	    <sqlMapGenerator targetPackage="org.jbxbase.mappers" targetProject="demo" />
+	    <javaClientGenerator targetPackage="org.jbxbase.dao" targetProject="demo" type="XMLMAPPER" />
+	    <!-- table schema="???" tableName="???" >
+	      <columnOverride column="???" property="???" />
+	    </table -->
+	    <table tableName="tuser" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+  </context>
+</generatorConfiguration>

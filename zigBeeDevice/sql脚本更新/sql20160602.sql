@@ -1,0 +1,1 @@
+UPDATE reliprivilege SET privilege_name='环境系统管理平台' WHERE id=1136;

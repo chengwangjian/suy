@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+
+	<table name="house" catalog="zigbeedevice">
+		<column name="description"></column>
+	</table>
+	<table name="deviceattribute" catalog="zigbeedevice"></table>
+	<table name="reliuser" catalog="zigbeedevice"
+		class="sy.model.ReliUser">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+	</table>
+	<table name="houseservice" catalog="zigbeedevice"
+		class="sy.model.Houseservice">
+		<primary-key>
+			<generator class="identity"></generator>
+		</primary-key>
+	</table>
+	<table name="apponlineinfo" catalog="zigbeedevice"
+		class="sy.model.Apponlineinfo">
+		<primary-key>
+			<generator class="identity"></generator>
+		</primary-key>
+	</table>
+	<table name="modeschcuser" catalog="zigbeedevice"
+		class="ModeSchcUser">
+		<primary-key>
+			<generator class="identity"></generator>
+		</primary-key>
+	</table>
+	<table name="singleenmg" catalog="zigbeedevice"
+		class="SingleENMG">
+		<primary-key>
+			<generator class="identity"></generator>
+		</primary-key>
+	</table>
+<table name="smartelapsedtime" catalog="zigbeedevice"
+	class="SmartElapsedTime">
+	<primary-key>
+		<generator class="identity"></generator>
+	</primary-key>
+</table>
+</hibernate-reverse-engineering>

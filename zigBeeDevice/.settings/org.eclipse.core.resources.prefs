@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//src/com/flywind/app/services/XmlUtil.java=gbk
+encoding//src/dbcpconfig.properties=gbk
+encoding//src/org/servlet/ServletToJsp.java=UTF-8
+encoding//src/resources.properties=UTF-8
+encoding//src/sy/util/CharStream.java=UTF-8
+encoding/<project>=UTF-8
+separateDerivedEncodings=true
